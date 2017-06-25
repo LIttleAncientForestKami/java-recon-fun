@@ -1,5 +1,7 @@
 package pl.lafk.fun.conc.parking;
 
+import pl.lafk.fun.conc.NamedThreadFactory;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,9 +56,9 @@ public class Parking<S extends String> {
 
     public static void main(String[] args) throws InterruptedException {
         Parking<String> p = new Parking<>(30, 3);
-        final Thread park35 = new Thread(new ParkCars(p, 35));
+        final Thread park35 = NamedThreadFactory.create(new ParkCars(p, 35), "parking 35 cars");
 
-        final Thread return7 = new Thread(new ReturnCars(p, 7));
+        final Thread return7 = NamedThreadFactory.create(new ReturnCars(p, 7), "returning 7 cars");
         park35.run();
         return7.run();
     }
