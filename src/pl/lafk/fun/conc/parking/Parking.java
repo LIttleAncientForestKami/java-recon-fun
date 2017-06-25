@@ -28,7 +28,7 @@ public class Parking<S extends String> {
         this.entriesNr = entriesNr;
     }
 
-    synchronized void parkACar(S car) {
+    void parkACar(S car) {
         System.out.format("P1: %d cars, parking a %s... ", cars.size(), car);
         if(cars.size() == size) {
             System.out.format("P.E1: Sorry, we're full\n");
@@ -38,7 +38,7 @@ public class Parking<S extends String> {
         System.out.format("P2: parked a %s... %d spots taken. ", car, cars.size());
     }
 
-    synchronized S returnACar(String car) {
+    S returnACar(String car) {
         System.out.format("R1: %d cars, returning a %s... ", cars.size(), car);
         if(cars.isEmpty()) {
             System.out.format("R.E1: Sorry, we're empty\n");
@@ -55,12 +55,10 @@ public class Parking<S extends String> {
     public static void main(String[] args) throws InterruptedException {
         Parking<String> p = new Parking<>(30, 3);
         final Thread park35 = new Thread(new ParkCars(p, 35));
-        park35.setName("Parking cars");
 
         final Thread return7 = new Thread(new ReturnCars(p, 7));
-        return7.setName("Returning cars");
-        park35.start();
-        return7.start();
+        park35.run();
+        return7.run();
     }
 
     private static class ParkCars implements Runnable {
